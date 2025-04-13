@@ -6,7 +6,7 @@ This repository provides sample code for performing Japanese Vision-Language (VQ
 
 ## File Structure
 
-- **main.py**  
+- **gemma3-4b-vg-vqa.ipynb**  
   A sample script that retrieves images and corresponding multiple Q&A from the JA-VG-VQA-500 dataset, passes them to Gemma3, and saves the model outputs in JSONL format.
 
 ---
