@@ -29,13 +29,7 @@ Pillow (PIL) の EXIF 処理によるエラーを回避するために decode=Fa
 
 
 
-スクリプトでは、JA-VG-VQA-500 の test スプリットから順に (画像・質問) を読み込みます。
-
-Pillow (PIL) の EXIF 処理によるエラーを回避するために decode=False を指定し、画像を raw bytes として読み込んでいます。
-
-読み込んだバイナリ画像を一時ファイルに保存 → Gemma3 にファイルパスを渡す形で推論を行います。
-
-出力ファイル (gemma3_output.jsonl)
+### 出力ファイル (gemma3_output.jsonl)
 推論結果は gemma3_output.jsonl に書き出されます。内容は以下の項目を含む JSON 形式です。
 
 image_id: 入力画像の ID
@@ -59,3 +53,17 @@ gt_answer: データセットのアノテーションとしての正解（比較
   "pred_answer": "晴れの日",
   "gt_answer": "晴天"
 }
+
+
+Gemma3 4B モデルはある程度の GPU メモリを要します。
+
+もしメモリ不足の場合は device_map="auto" を利用して CPU と GPU を自動的に切り分けるか、より大きな GPU インスタンスを利用してください。
+
+一時ファイルの削除
+スクリプトでは推論後に temp_***.jpg を削除していますが、環境によってはファイルが残る場合があります。
+必要に応じて手動でクリーンアップしてください。
+
+### ライセンス
+JA-VG-VQA-500 データセットは SakanaAI/JA-VG-VQA-500 のライセンスに従います。
+
+Gemma3 モデルは Google 提供のライセンスに従ってご利用ください。
