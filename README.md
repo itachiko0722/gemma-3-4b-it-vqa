@@ -1,73 +1,64 @@
 # gemma-3-4b-vqa
 
-このリポジトリでは、[SakanaAI/JA-VG-VQA-500](https://huggingface.co/datasets/SakanaAI/JA-VG-VQA-500) データセットと Google の Gemma3 モデル ([google/gemma-3-4b-it](https://huggingface.co/google/gemma-3-4b-it)) を利用し、  
-日本語ビジョンランゲージ（VQA: Visual Question Answering）推論を行うためのサンプルコードを提供しています。
+This repository provides sample code for performing Japanese Vision-Language (VQA: Visual Question Answering) inference using the [SakanaAI/JA-VG-VQA-500](https://huggingface.co/datasets/SakanaAI/JA-VG-VQA-500) dataset and Google's Gemma3 model ([google/gemma-3-4b-it](https://huggingface.co/google/gemma-3-4b-it)).
 
 ---
 
-## ファイル構成
+## File Structure
 
 - **main.py**  
-  JA-VG-VQA-500 データセットから画像データと対応する複数の Q&A を取得し、Gemma3 へ入力 → モデル出力を JSONL 形式で保存するサンプルスクリプト。
+  A sample script that retrieves images and corresponding multiple Q&A from the JA-VG-VQA-500 dataset, passes them to Gemma3, and saves the model outputs in JSONL format.
 
 ---
 
-## 環境構築手順
+## Environment Setup Instructions
 
-### 1. Python のインストール
-Python 3.8 以上を推奨します（3.7 以下の場合、一部のライブラリで問題が起きる可能性があります）。
+### 1. Install Python
+Python version 3.8 or higher is recommended (versions 3.7 and below may encounter issues with some libraries).
 
-### 2. 必要パッケージのインストール
-\```bash  
-git clone <このリポジトリのURL>  
+### 2. Install Required Packages
+```bash  
+git clone <repository URL>  
 cd gemma-3-4b-vqa  
-\```
+```
 
+The script sequentially reads (image, question) pairs from the test split of JA-VG-VQA-500.
 
+To avoid EXIF processing errors from Pillow (PIL), images are loaded as raw bytes by specifying `decode=False`.
 
-スクリプトでは、JA-VG-VQA-500 の test スプリットから順に (画像・質問) を読み込みます。
-
-Pillow (PIL) の EXIF 処理によるエラーを回避するために decode=False を指定し、画像を raw bytes として読み込みます。
-
-読み込んだバイナリ画像を一時ファイル (temp_***.jpg) に保存し、Gemma3 にそのファイルパスを渡して推論を行います。
+The binary image is temporarily saved as a file (`temp_***.jpg`) and passed to Gemma3 for inference using its file path.
 
 ---
 
-### 出力ファイル (gemma3_output.jsonl)
-推論結果は gemma3_output.jsonl に書き出されます。内容は以下の項目を含む JSON 形式です。
+### Output File (gemma3_output.jsonl)
+Inference results are saved to `gemma3_output.jsonl`. Each entry is JSON-formatted with the following fields:
 
-image_id: 入力画像の ID
+- `image_id`: ID of the input image
+- `qa_id`: Unique ID for each question
+- `url`: External URL of the image
+- `question`: Question text
+- `pred_answer`: Gemma3's inferred answer
+- `gt_answer`: Ground truth answer from the dataset (for comparison)
 
-qa_id: 質問ごとのユニーク ID
-
-url: 画像の外部 URL
-
-question: 質問文
-
-pred_answer: Gemma3 の推論回答
-
-gt_answer: データセットのアノテーションとしての正解（比較用）
-
-出力例（1 QA あたり1行の JSON 形式）
+Output Example (one QA per JSON line):
+```json
 {
   "image_id": 100,
   "qa_id": 10674688,
   "url": "https://example.com/image.jpg",
-  "question": "どんな天候ですか？",
-  "pred_answer": "晴れの日",
-  "gt_answer": "晴天"
+  "question": "What is the weather like?",
+  "pred_answer": "Sunny",
+  "gt_answer": "Clear weather"
 }
+```
 
+The Gemma3 4B model requires substantial GPU memory. If you encounter memory issues, consider using `device_map="auto"` to automatically split processing between CPU and GPU, or use an instance with more GPU memory.
 
-Gemma3 4B モデルはある程度の GPU メモリを要します。
+Temporary File Cleanup
+The script attempts to delete the temporary `temp_***.jpg` files after inference, but files might remain depending on your environment. Manually clean these up if necessary.
 
-もしメモリ不足の場合は device_map="auto" を利用して CPU と GPU を自動的に切り分けるか、より大きな GPU インスタンスを利用してください。
+### License
+The JA-VG-VQA-500 dataset follows the SakanaAI/JA-VG-VQA-500 dataset license.
 
-一時ファイルの削除
-スクリプトでは推論後に temp_***.jpg を削除していますが、環境によってはファイルが残る場合があります。
-必要に応じて手動でクリーンアップしてください。
+The Gemma3 model usage is governed by Google's provided license.
 
-### ライセンス
-JA-VG-VQA-500 データセットは SakanaAI/JA-VG-VQA-500 のライセンスに従います。
-
-Gemma3 モデルは Google 提供のライセンスに従ってご利用ください。
