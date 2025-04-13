@@ -31,7 +31,7 @@ The binary image is temporarily saved as a file (`temp_***.jpg`) and passed to G
 ---
 
 ### Output File (gemma3_inference_vg_vq.jsonl)
-Inference results are saved to `gemma3_output.jsonl`. Each entry is JSON-formatted with the following fields:
+Inference results are saved to `gemma3_inference_vg_vq.jsonl`. Each entry is JSON-formatted with the following fields:
 
 - `image_id`: ID of the input image
 - `qa_id`: Unique ID for each question
