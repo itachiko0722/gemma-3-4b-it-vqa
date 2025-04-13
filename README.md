@@ -18,15 +18,6 @@
 Python 3.8 以上を推奨します（3.7 以下の場合、一部のライブラリで問題が起きる可能性があります）。
 
 ### 2. 必要パッケージのインストール
-以下のように `pip` を利用してインストールします:
-
-```bash
-pip install --upgrade pip
-pip install torch transformers datasets Pillow
-
-
-
-
 
 
 スクリプトでは、JA-VG-VQA-500 の test スプリットから順に (画像・質問) を読み込みます。
