@@ -31,8 +31,7 @@ Pillow (PIL) の EXIF 処理によるエラーを回避するために decode=Fa
 
 読み込んだバイナリ画像を一時ファイル (temp_***.jpg) に保存し、Gemma3 にそのファイルパスを渡して推論を行います。
 
-
-
+---
 
 ### 出力ファイル (gemma3_output.jsonl)
 推論結果は gemma3_output.jsonl に書き出されます。内容は以下の項目を含む JSON 形式です。
